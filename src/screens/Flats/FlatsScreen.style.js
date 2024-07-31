@@ -1,74 +1,44 @@
 import { StyleSheet } from "react-native";
-import Theme from "../../component/themes"; // Asegúrate de ajustar la ruta de importación según la ubicación de tu tema
 
 export const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: Theme.colors.background,
+    flexGrow: 1,
+    padding: 16,
   },
-  icon: {
-    marginRight: 10,
-    color: Theme.colors.text,
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // 'cover' para cubrir toda la pantalla
+    justifyContent: 'center', // Alineación vertical centrada
   },
-  icongps: {
-    color: "green", // Color personalizado para el ícono de GPS
+  overlay: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fondo blanco con opacidad del 80%
+    borderRadius: 8,
+    padding: 16,
+  },
+  error: {
+    color: 'red',
   },
   largeInputGroup: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: Theme.colors.background,
-    borderRadius: 10,
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
+    marginBottom: 10,
+  },
+  icon: {
+    marginRight: 8,
+  },
+  largeInput: {
+    flex: 1,
   },
   inputGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: Theme.colors.background,
-    borderRadius: 10,
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
+    marginBottom: 10,
   },
   input: {
     flex: 1,
-    fontSize: 16,
-    color: Theme.colors.text,
-  },
-  switchGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-    paddingVertical: 14,
-    paddingHorizontal: 18,
-    backgroundColor: '#FFFFFF',
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderColor: Theme.colors.background,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  error: {
-    color: Theme.colors.error,
-    marginBottom: 20,
-    fontSize: 16,
+    borderRadius: 4,
+    padding: 8,
   },
   loadingIndicator: {
     marginTop: 20,

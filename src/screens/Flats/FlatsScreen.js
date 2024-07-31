@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  ImageBackground
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -37,7 +38,6 @@ export function FlatsScreen({ route }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
-
 
   const toggleModal = () => setShowModal(!showModal);
 
@@ -70,9 +70,6 @@ export function FlatsScreen({ route }) {
       console.error("Error fetching user ID:", error);
     }
   };
-
-  // Función para obtener la lista de provincias desde la API
- 
 
   // Función para obtener los detalles del apartamento para actualizar
   const fetchFlatDetails = async (id) => {
@@ -186,137 +183,142 @@ export function FlatsScreen({ route }) {
   }, [userId, route.params.type]);
 
   return (
-    <>
+    <ImageBackground 
+      source={{ uri: 'https://c.wallhere.com/photos/c2/7d/AI_art_illustration_mountains_vector_art_blue_orange-2223190.jpg!d' }} 
+      style={styles.backgroundImage}
+    >
       <ScrollView contentContainerStyle={styles.container}>
-        {error ? <Text style={styles.error}>{error}</Text> : null}
-        <View style={styles.largeInputGroup}>
-          <Icon
-            name="add-road"
-            size={24}
-            style={styles.icon}
-            onPress={toggleModal}
-          />
-          <TextInput
-            style={[styles.input, styles.largeInput]} // Combina estilos para hacer el TextInput más grande
-            placeholder="Street name"
-            value={flats.streetName}
-            onChangeText={(text) => setFlats({ ...flats, streetName: text })}
-            editable={false} // Esta línea deshabilita la edición del TextInput
-          />
-          <Icon
-            name="gps-fixed"
-            size={24}
-            style={[styles.icon, styles.icongps]} // Ajusta el estilo del ícono GPS si es necesario
-            onPress={toggleModal}
-          />
-        </View>
+        <View style={styles.overlay}>
+          {error ? <Text style={styles.error}>{error}</Text> : null}
+          <View style={styles.largeInputGroup}>
+            <Icon
+              name="add-road"
+              size={24}
+              style={styles.icon}
+              onPress={toggleModal}
+            />
+            <TextInput
+              style={[styles.input, styles.largeInput]} // Combina estilos para hacer el TextInput más grande
+              placeholder="Street name"
+              value={flats.streetName}
+              onChangeText={(text) => setFlats({ ...flats, streetName: text })}
+              editable={false} // Esta línea deshabilita la edición del TextInput
+            />
+            <Icon
+              name="gps-fixed"
+              size={24}
+              style={[styles.icon, styles.icongps]} // Ajusta el estilo del ícono GPS si es necesario
+              onPress={toggleModal}
+            />
+          </View>
 
-        <CustomModal
-          visible={showModal}
-          onClose={toggleModal}
-          onLocationSelect={handleLocationSelect}
-        />
+          <CustomModal
+            visible={showModal}
+            onClose={toggleModal}
+            onLocationSelect={handleLocationSelect}
+          />
 
-        <View style={{ flexDirection: "row", marginBottom: 5 }}>
-          <View style={[styles.inputGroup, { flex: 1, marginRight: 10 }]}>
-            <Icon name="signpost" size={24} style={styles.icon} />
+          <View style={{ flexDirection: "row", marginBottom: 5 }}>
+            <View style={[styles.inputGroup, { flex: 1, marginRight: 10 }]}>
+              <Icon name="signpost" size={24} style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Street number"
+                value={flats.streetNumber}
+                onChangeText={(text) =>
+                  setFlats({ ...flats, streetNumber: text })
+                }
+              />
+            </View>
+
+            <View style={[styles.inputGroup, { flex: 1, marginLeft: 10 }]}>
+              <Icon name="fit-screen" size={24} style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Area size"
+                keyboardType="numeric"
+                value={flats.areaSize}
+                onChangeText={(text) => setFlats({ ...flats, areaSize: text })}
+              />
+            </View>
+          </View>
+
+          <View style={{ flexDirection: "row", marginBottom: 5 }}>
+            <View style={[styles.inputGroup, { flex: 1, marginLeft: 10 }]}>
+              <Icon name="date-range" size={24} style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Year built"
+                keyboardType="numeric"
+                value={flats.yearBuilt}
+                onChangeText={(text) => setFlats({ ...flats, yearBuilt: text })}
+              />
+            </View>
+
+            <View style={[styles.inputGroup, { flex: 1, marginLeft: 10 }]}>
+              <Icon name="price-change" size={24} style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Rent price"
+                keyboardType="numeric"
+                value={flats.rentPrice}
+                onChangeText={(text) => setFlats({ ...flats, rentPrice: text })}
+              />
+            </View>
+          </View>
+          <View style={{ flexDirection: "row", marginBottom: 5 }}>
+            <View style={[styles.inputGroup, { flex: 1, marginLeft: 10 }]}>
+              <Icon name="event-note" size={24} style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Date Available"
+                value={flats.dateAvailable}
+                onChangeText={(text) =>
+                  setFlats({ ...flats, dateAvailable: text })
+                }
+              />
+            </View>
+
+            <View style={[styles.inputGroup, { flex: 1, marginLeft: 10 }]}>
+              <Text>Has AC</Text>
+              <Switch
+                value={flats.hasAc}
+                onValueChange={(value) => setFlats({ ...flats, hasAc: value })}
+              />
+            </View>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Icon name="location-on" size={24} style={styles.icon} />
             <TextInput
               style={styles.input}
-              placeholder="Street number"
-              value={flats.streetNumber}
-              onChangeText={(text) =>
-                setFlats({ ...flats, streetNumber: text })
-              }
+              placeholder="Latitude"
+              value={flats.city}
+              editable={false} // Esta línea deshabilita la edición del TextInput
             />
           </View>
 
-          <View style={[styles.inputGroup, { flex: 1, marginLeft: 10 }]}>
-            <Icon name="fit-screen" size={24} style={styles.icon} />
+          <View style={styles.inputGroup}>
+            <Icon name="location-on" size={24} style={styles.icon} />
             <TextInput
               style={styles.input}
-              placeholder="Area size"
-              keyboardType="numeric"
-              value={flats.areaSize}
-              onChangeText={(text) => setFlats({ ...flats, areaSize: text })}
-            />
-          </View>
-        </View>
-
-        <View style={{ flexDirection: "row", marginBottom: 5 }}>
-          <View style={[styles.inputGroup, { flex: 1, marginLeft: 10 }]}>
-            <Icon name="date-range" size={24} style={styles.icon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Year built"
-              keyboardType="numeric"
-              value={flats.yearBuilt}
-              onChangeText={(text) => setFlats({ ...flats, yearBuilt: text })}
+              placeholder="Latitude"
+              value={flats.canton}
+              editable={false} // Esta línea deshabilita la edición del TextInput
             />
           </View>
 
-          <View style={[styles.inputGroup, { flex: 1, marginLeft: 10 }]}>
-            <Icon name="price-change" size={24} style={styles.icon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Rent price"
-              keyboardType="numeric"
-              value={flats.rentPrice}
-              onChangeText={(text) => setFlats({ ...flats, rentPrice: text })}
+          <Button title="Submit" onPress={handleSubmit} />
+
+          {loading && (
+            <ActivityIndicator
+              size="large"
+              color="#0000ff"
+              style={styles.loadingIndicator}
             />
-          </View>
+          )}
         </View>
-        <View style={{ flexDirection: "row", marginBottom: 5 }}>
-          <View style={[styles.inputGroup, { flex: 1, marginLeft: 10 }]}>
-            <Icon name="event-note" size={24} style={styles.icon} />
-            <TextInput
-              style={styles.input}
-              placeholder="Date Available"
-              value={flats.dateAvailable}
-              onChangeText={(text) =>
-                setFlats({ ...flats, dateAvailable: text })
-              }
-            />
-          </View>
-
-          <View style={[styles.inputGroup, { flex: 1, marginLeft: 10 }]}>
-            <Text>Has AC</Text>
-            <Switch
-              value={flats.hasAc}
-              onValueChange={(value) => setFlats({ ...flats, hasAc: value })}
-            />
-          </View>
-        </View>
-
-        <View style={styles.inputGroup}>
-          <Icon name="location-on" size={24} style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Latitude"
-            value={flats.city}
-            editable={false} // Esta línea deshabilita la edición del TextInput
-          />
-        </View>
-
-        <View style={styles.inputGroup}>
-          <Icon name="location-on" size={24} style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Latitude"
-            value={flats.canton}
-            editable={false} // Esta línea deshabilita la edición del TextInput
-          />
-        </View>
-
-        <Button title="Submit" onPress={handleSubmit} />
-
-        {loading && (
-          <ActivityIndicator
-            size="large"
-            color="#0000ff"
-            style={styles.loadingIndicator}
-          />
-        )}
       </ScrollView>
-    </>
+    </ImageBackground>
   );
 }

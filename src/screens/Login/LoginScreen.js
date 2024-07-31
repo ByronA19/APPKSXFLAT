@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  Button,
+ /*  Button, */
   StyleSheet,
   ImageBackground,
   Image,
@@ -13,6 +13,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios"; // Asegúrate de importar axios si aún no lo has hecho
 import { API_URLS } from "../../config/apiConfig";
 import { styles } from "./LoginScreen.style";
+import { Button } from 'react-native-paper';
+import { color } from "react-native-elements/dist/helpers";
 
 export function LoginScreen({ navigation, setIsLoggedIn }) {
   const [email, setEmail] = useState("");
@@ -116,7 +118,7 @@ export function LoginScreen({ navigation, setIsLoggedIn }) {
         />
         <Text style={styles.title}>Login</Text>
         <TextInput
-          style={styles.input}
+          style={styles.input }
           placeholder="Email"
           value={email}
           onChangeText={handleEmailChange}
@@ -130,7 +132,17 @@ export function LoginScreen({ navigation, setIsLoggedIn }) {
           onChangeText={setPassword}
           secureTextEntry
         />
-        <Button color={"#8b0a50"} title="Login" onPress={handleLogin} />
+         <Button icon="login" mode="contained"  onPress={handleLogin} >Login</Button>
+        {alert && (
+          <Text
+            style={
+              alert.type === "success" ? styles.successText : styles.errorText
+            }
+          >
+            {alert.message }
+          </Text>
+        )}
+       {/*  <Button icon='camara' color={"#8b0a50"} title="Login" onPress={handleLogin} />
         {alert && (
           <Text
             style={
@@ -139,7 +151,7 @@ export function LoginScreen({ navigation, setIsLoggedIn }) {
           >
             {alert.message}
           </Text>
-        )}
+        )} */}
         {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
         {emailExists && (
           <TouchableOpacity onPress={handleForgotPassword}>

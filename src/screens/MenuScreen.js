@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList, Image } from "react-native";
-import { screen } from "../utils"; // Asegúrate de que la ruta sea correcta
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Modal, TouchableWithoutFeedback, ImageBackground } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { FontAwesome } from "@expo/vector-icons"; // Importa FontAwesome desde @expo/vector-icons
+import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button, useTheme, Surface } from "react-native-paper";
+import { screen } from "../utils"; // Asegúrate de que la ruta sea correcta
 
 export function MenuScreen() {
   const navigation = useNavigation();
-  const [iUser, setIUser] = useState(0); // Estado para determinar si el usuario es Admin o Landors
-  const [storedUserId, setStoredUserId] = useState(""); // Estado para el userId
-  const [storedUserType, setStoredUserType] = useState(""); // Estado para el rol del usuario
+  const [iUser, setIUser] = useState(0);
+  const [storedUserId, setStoredUserId] = useState("");
+  const [storedUserType, setStoredUserType] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const sections = [
-    { id: 1, title: "Sección 1", image: require("../../assets/Login.png") },
-    { id: 2, title: "Sección 2", image: require("../../assets/Login.png") },
-    { id: 3, title: "Sección 3", image: require("../../assets/Login.png") },
-    { id: 4, title: "Sección 4", image: require("../../assets/Login.png") },
-    { id: 5, title: "Sección 5", image: require("../../assets/Login.png") },
-    { id: 6, title: "Sección 6", image: require("../../assets/Login.png") },
+    { id: 1, title: "CARTAJENA DE INDIAS", description: "Hermosa ciudad colonial.", image: require("../../assets/Cartejena.jpg") },
+    { id: 2, title: "PUNTA CANA", description: "Famoso destino turístico.", image: require("../../assets/pUNTA.jpg") },
+    { id: 3, title: "PUNTA SAL", description: "Playa paradisiaca en Perú.", image: require("../../assets/punta-sal-016.jpg") },
+    { id: 4, title: "CONCORDIA ARGENTINA", description: "Conocida por sus termas.", image: require("../../assets/concordia1.jpg") },
+    { id: 5, title: "ECUADOR QUITO", description: "Capital ecuatoriana en la sierra.", image: require("../../assets/ECUADOR.jpg") },
+    { id: 6, title: "PERU MACHUPICHU", description: "Antigua ciudad inca.", image: require("../../assets/MACHU.jpg") },
   ];
 
   useEffect(() => {
@@ -34,68 +37,124 @@ export function MenuScreen() {
 
       } catch (error) {
         console.error("Error fetching userId from AsyncStorage:", error.message);
-        // Manejo de errores
       }
     };
 
     fetchUserId();
-  }, [navigation]); // Dependencia de navegación para actualizar cuando la navegación cambia
+  }, [navigation]);
+
+  const handleImagePress = (item) => {
+    setSelectedImage(item);
+    setModalVisible(true);
+  };
 
   const renderSection = ({ item }) => (
     <TouchableOpacity
       style={styles.sectionContainer}
-      onPress={() => {}}
+      onPress={() => handleImagePress(item)}
     >
       <Image source={item.image} style={styles.sectionImage} />
       <Text style={styles.sectionTitle}>{item.title}</Text>
     </TouchableOpacity>
   );
 
-  return (
-    <View style={styles.container}>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {iUser === 1 ? (
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate(screen.flat.flats)}
-          >
-            <FontAwesome name="list-alt" size={24} color="white" style={styles.icon} />
-            <Text style={styles.buttonText}>Edit</Text>
-          </TouchableOpacity>
-        ) : null}
+  const ItemSeparator = () => (
+    <View style={styles.separator} />
+  );
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate(screen.flat.listflats)}
-        >
-          <FontAwesome name="building" size={24} color="white" style={styles.icon} />
-          <Text style={styles.buttonText}>Flats</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() =>
-            navigation.navigate(screen.flat.favoriteflats, { type: "favo", userId: storedUserId })
-          }
-        >
-          <FontAwesome name="cog" size={24} color="white" style={styles.icon} />
-          <Text style={styles.buttonText}>Favoritos</Text>
-        </TouchableOpacity>
-      </ScrollView>
-      <FlatList
-        data={sections}
-        renderItem={renderSection}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={2}
-        contentContainerStyle={styles.sectionsContainer}
-      />
-    </View>
+  const theme = useTheme();
+
+  return (
+    <ImageBackground
+      source={{ uri: 'https://img.freepik.com/fotos-premium/equipo-turistico-mochila-botas-montanas-dolomitas-ia-generativa_641010-9032.jpg?w=996' }} // Reemplaza con la URL de tu imagen
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <View style={styles.buttonContainer}>
+          {iUser === 1 ? (
+            <Surface style={styles.surface}>
+              <Button
+                mode="contained"
+                icon={() => <FontAwesome name="list-alt" size={24} color="white" />}
+                onPress={() => navigation.navigate(screen.flat.flats)}
+                style={styles.button}
+                labelStyle={styles.buttonText}
+              >
+                Edit
+              </Button>
+            </Surface>
+          ) : null}
+          <Surface style={styles.surface}>
+            <Button
+              mode="contained"
+              icon={() => <FontAwesome name="building" size={24} color="white" />}
+              onPress={() => navigation.navigate(screen.flat.listflats)}
+              style={styles.button}
+              labelStyle={styles.buttonText}
+            >
+              Flats
+            </Button>
+          </Surface>
+          <Surface style={styles.surface}>
+            <Button
+              mode="contained"
+              icon={() => <FontAwesome name="cog" size={24} color="white" />}
+              onPress={() =>
+                navigation.navigate(screen.flat.favoriteflats, { type: "favo", userId: storedUserId })
+              }
+              style={styles.button}
+              labelStyle={styles.buttonText}
+            >
+              Favoritos
+            </Button>
+          </Surface>
+        </View>
+        <Text style={styles.title}>DESTINOS TURISTICOS</Text>
+        <FlatList
+          data={sections}
+          renderItem={renderSection}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={2}
+          contentContainerStyle={styles.sectionsContainer}
+          ItemSeparatorComponent={ItemSeparator}
+        />
+        <Modal visible={modalVisible} transparent={true} animationType="fade">
+          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modalBackground}>
+              {selectedImage && (
+                <>
+                  <Image source={selectedImage.image} style={styles.fullscreenImage} />
+                  <Text style={styles.modalTitle}>{selectedImage.title}</Text>
+                  <Text style={styles.modalDescription}>{selectedImage.description}</Text>
+                </>
+              )}
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingTop: 30,
-    backgroundColor: "#f0f0f0",
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: 20,
+  },
+  surface: {
+    marginHorizontal: 10,
+    borderRadius: 30,
+    elevation: 5,
   },
   button: {
     flexDirection: "row",
@@ -103,26 +162,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 20,
-    marginHorizontal: 10,
-    backgroundColor: "#6200ea",
     borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   buttonText: {
-    color: "#fff",
     fontSize: 16,
-    marginLeft: 10,
     fontWeight: "bold",
   },
-  icon: {
-    marginRight: 10,
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: 20,
+    color: "#000", // Puedes ajustar el color según tu tema
   },
   sectionsContainer: {
     paddingHorizontal: 10,
@@ -143,7 +194,7 @@ const styles = StyleSheet.create({
   },
   sectionImage: {
     width: 150,
-    height: 100,
+    height: 200, // Aumentar la altura para hacerlo más vertical
     borderRadius: 8,
     marginBottom: 10,
   },
@@ -152,5 +203,34 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 10,
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.8)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  fullscreenImage: {
+    width: "90%",
+    height: "50%",
+    resizeMode: "contain",
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+    marginTop: 20,
+    textAlign: "center",
+  },
+  modalDescription: {
+    fontSize: 16,
+    color: "#fff",
+    marginTop: 10,
+    textAlign: "center",
+    paddingHorizontal: 20,
+  },
+  separator: {
+    height: 10, // Tamaño de la separación
+    backgroundColor: "#ddd", // Color de la separación
   },
 });

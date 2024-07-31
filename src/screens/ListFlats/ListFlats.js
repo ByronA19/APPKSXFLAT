@@ -7,6 +7,7 @@ import {
   FlatList,
   ActivityIndicator,
   Linking,
+  ImageBackground,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
@@ -15,7 +16,6 @@ import { Card, Icon } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { screen } from "../../utils";
-import { styles } from "./ListFlats.style";
 import { API_URLS } from "../../config/apiConfig";
 import CustomModalWithLocation from "../../component/CustomModalWithLocation";
 import MessageCardModal from "../../component/MessageCardModal";
@@ -144,10 +144,9 @@ export function ListFlats({ route }) {
   };
 
   const toggleMaps = async (idFlats, idUsuario, latitude, longitude) => {
-    console.log("toggleMaps", idFlats, latitude, longitude);
     setModalData({
       ...modalData,
-      latitude: longitude ,
+      latitude: longitude,
       longitude: latitude,
     });
     setModalVisibleLocation(true);
@@ -215,7 +214,7 @@ export function ListFlats({ route }) {
       duration={1000}
       style={styles.flatContainer}
     >
-      <Card>
+      <Card containerStyle={styles.cardContainer}>
         <View style={styles.headerContainer}>
           <Text style={styles.flatName}>{item.streetNumber}</Text>
           {userIdSet === item.user._id && (
@@ -228,7 +227,7 @@ export function ListFlats({ route }) {
                   })
                 }
               >
-                <FontAwesome name="edit" size={24} color="green" />
+                <FontAwesome name="edit" size={24} color="#4CAF50" />
               </TouchableOpacity>
             </View>
           )}
@@ -239,7 +238,7 @@ export function ListFlats({ route }) {
             <FontAwesome
               name={favorites[item._id] ? "heart" : "heart-o"}
               size={24}
-              color={favorites[item._id] ? "red" : "black"}
+              color={favorites[item._id] ? "#F44336" : "#333"}
             />
           </TouchableOpacity>
           <TouchableOpacity
@@ -251,9 +250,9 @@ export function ListFlats({ route }) {
                 item.canton
               )
             }
-            style={styles.heartIconContainer}
+            style={styles.mapIconContainer}
           >
-            <FontAwesome name={"map-marker"} size={24} />
+            <FontAwesome name="map-marker" size={24} color="#FF5722" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
@@ -266,7 +265,7 @@ export function ListFlats({ route }) {
             }
             style={styles.whatsappIconContainer}
           >
-            <FontAwesome name="whatsapp" size={24} color="green" />
+            <FontAwesome name="whatsapp" size={24} color="#25D366" />
           </TouchableOpacity>
         </View>
         <Card.Divider />
@@ -291,7 +290,7 @@ export function ListFlats({ route }) {
           <Icon
             name="snowflake-o"
             type="font-awesome"
-            color={item.hasAc ? "blue" : "grey"}
+            color={item.hasAc ? "#2196F3" : "#9E9E9E"}
           />
           <Text style={styles.iconText}>{item.hasAc ? "Has AC" : "No AC"}</Text>
         </View>
@@ -313,7 +312,7 @@ export function ListFlats({ route }) {
                 )
               }
             >
-              <FontAwesome name="envelope" size={24} color="black" />
+              <FontAwesome name="envelope" size={24} color="#333" />
             </TouchableOpacity>
           </View>
         )}
@@ -335,7 +334,11 @@ export function ListFlats({ route }) {
       : flatsData;
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={{ uri: 'https://c.wallhere.com/photos/c2/7d/AI_art_illustration_mountains_vector_art_blue_orange-2223190.jpg!d' }} // Reemplaza con la URL de tu imagen
+      style={styles.container}
+      resizeMode="cover" // Ajusta el tamaño de la imagen para cubrir el fondo
+    >
       <FlatList
         data={filteredFlats}
         renderItem={renderFlat}
@@ -365,6 +368,71 @@ export function ListFlats({ route }) {
           onClose={handleCloseModal}
         />
       )}
-    </View>
+    </ImageBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 30,
+  },
+  flatContainer: {
+    marginBottom: 15,
+  },
+  cardContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    elevation: 5,
+    padding: 15,
+    borderColor: '#FF5722',
+    borderWidth: 2,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  flatName: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  heartIconContainer: {
+    marginHorizontal: 8,
+  },
+  mapIconContainer: {
+    marginHorizontal: 8,
+  },
+  whatsappIconContainer: {
+    marginHorizontal: 8,
+  },
+  userIconContainer: {
+    marginHorizontal: 8,
+  },
+  userIcon: {
+    backgroundColor: '#E0E0E0',
+    borderRadius: 50,
+    padding: 5,
+  },
+  iconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  iconText: {
+    marginLeft: 8,
+    color: '#555',
+  },
+  flatDescription: {
+    fontSize: 16,
+    color: '#444',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+});

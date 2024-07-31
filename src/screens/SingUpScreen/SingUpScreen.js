@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ImageBackground, Image, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, TextInput,/*  Button, */ StyleSheet, ImageBackground, Image, TouchableOpacity, Modal } from 'react-native';
 import axios from 'axios';
 import { API_URLS } from "../../config/apiConfig";
 import InputCodigo from '../../component/InputCodigo'; // Asegúrate de ajustar la ruta de importación según tu estructura de archivos
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { styles } from './SingUpScreen.style';
+import { Button } from 'react-native-paper';
 export function SignUpScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -132,13 +133,13 @@ export function SignUpScreen({ navigation }) {
                     autoCapitalize="none"
                 />
                 {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-                {!isEmailValidated && <Button color={'#8b0a50'} title="Validate Email" onPress={() => {
+                {!isEmailValidated && < Button icon="account-plus" mode="contained" title="Validate Email" onPress={() => {
                     if (validateEmailFormat(email)) {
                         validateEmail(email);
                     } else {
                         setEmailError('Ingrese un correo electrónico válido');
                     }
-                }} />}
+                }}  >Validate email</Button>}
                 {isEmailValidated && (
                     <>
                         <View style={styles.passwordContainer}>
@@ -165,7 +166,10 @@ export function SignUpScreen({ navigation }) {
                                 <Icon name={secureConfirmPassword ? 'eye-slash' : 'eye'} size={20} color="gray" />
                             </TouchableOpacity>
                         </View>
+
+
                         <Button title="Registrarse" onPress={handleSignUp} />
+                        <Button icon="account-plus" mode="contained"  onPress={handleSignUp} >Register</Button>
                     </>
                 )}
                 <TouchableOpacity onPress={() => navigation.navigate('Login')}>
